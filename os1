@@ -1,0 +1,134 @@
+#include <stdio.h> 
+#define NUM_PROCESSES 5 
+#define NUM_RESOURCES 3  
+int available[NUM_RESOURCES]; 
+int max[NUM_PROCESSES][NUM_RESOURCES]; 
+int allocation[NUM_PROCESSES][NUM_RESOURCES]; 
+int need[NUM_PROCESSES][NUM_RESOURCES]; 
+void acceptAvailable(); 
+void acceptAllocation(); 
+void acceptMax(); 
+void calculateNeed(); 
+void displayAllocation(); 
+void displayMax(); 
+void displayNeed(); 
+void displayAvailable(); 
+int main() { 
+int choice; 
+do { 
+printf("\nBanker's Algorithm Menu:\n"); 
+printf("1. Accept Available Resources\n"); 
+printf("2. Accept Allocation Matrix\n"); 
+printf("3. Accept Max Matrix\n"); 
+printf("4. Display Allocation Matrix\n"); 
+printf("5. Display Max Matrix\n"); 
+printf("6. Display Need Matrix\n"); 
+printf("7. Display Available Resources\n"); 
+printf("8. Exit\n"); 
+printf("Enter your choice: "); 
+scanf("%d", &choice); 
+switch (choice) { 
+case 1: 
+acceptAvailable(); 
+break; 
+case 2: 
+acceptAllocation(); 
+break; 
+case 3: 
+acceptMax();
+break; 
+case 4: 
+displayAllocation(); 
+break; 
+case 5: 
+displayMax(); 
+break; 
+case 6: 
+calculateNeed(); 
+displayNeed(); 
+break; 
+case 7: 
+displayAvailable(); 
+break; 
+case 8: 
+printf("Exiting...\n"); 
+break; 
+default: 
+printf("Invalid choice. Please try again.\n"); } 
+} while (choice != 8); 
+return 0; 
+} 
+void acceptAvailable() { 
+printf("\nEnter available resources:\n"); for (int i = 0; i < NUM_RESOURCES; i++) { printf("Resource %d: ", i + 1); 
+scanf("%d", &available[i]); 
+} 
+} 
+void acceptAllocation() { 
+printf("\nEnter allocation matrix:\n"); for (int i = 0; i < NUM_PROCESSES; i++) { printf("Enter allocation for process P%d: ", i + 1); for (int j = 0; j < NUM_RESOURCES; j++) { scanf("%d", &allocation[i][j]); 
+} 
+} 
+} 
+void acceptMax() { 
+printf("\nEnter max matrix:\n"); 
+for (int i = 0; i < NUM_PROCESSES; i++) { printf("Enter max for process P%d: ", i + 1); for (int j = 0; j < NUM_RESOURCES; j++) { scanf("%d", &max[i][j]); 
+}
+} 
+} 
+void displayAllocation() { 
+printf("\nAllocation Matrix:\n"); 
+printf(" "); 
+for (int i = 0; i < NUM_RESOURCES; i++) { 
+printf("R%d ", i + 1); 
+} 
+printf("\n"); 
+for (int i = 0; i < NUM_PROCESSES; i++) { 
+printf("P%d ", i + 1); 
+for (int j = 0; j < NUM_RESOURCES; j++) { 
+printf("%d ", allocation[i][j]); 
+} 
+printf("\n"); 
+} 
+} 
+void displayMax() { 
+printf("\nMax Matrix:\n"); 
+printf(" "); 
+for (int i = 0; i < NUM_RESOURCES; i++) { 
+printf("R%d ", i + 1); 
+} 
+printf("\n"); 
+for (int i = 0; i < NUM_PROCESSES; i++) { 
+printf("P%d ", i + 1); 
+for (int j = 0; j < NUM_RESOURCES; j++) { 
+printf("%d ", max[i][j]); 
+} 
+printf("\n"); 
+} 
+} 
+void calculateNeed() { 
+for (int i = 0; i < NUM_PROCESSES; i++) { 
+for (int j = 0; j < NUM_RESOURCES; j++) { 
+need[i][j] = max[i][j] - allocation[i][j]; 
+} 
+} 
+} 
+void displayNeed() { 
+printf("\nNeed Matrix:\n"); 
+printf(" "); 
+for (int i = 0; i < NUM_RESOURCES; i++) { 
+printf("R%d ", i + 1); 
+}
+printf("\n"); 
+for (int i = 0; i < NUM_PROCESSES; i++) { 
+printf("P%d ", i + 1); 
+for (int j = 0; j < NUM_RESOURCES; j++) { 
+printf("%d ", need[i][j]); 
+} 
+printf("\n"); 
+} 
+} 
+void displayAvailable() { 
+printf("\nAvailable Resources:\n"); 
+for (int i = 0; i < NUM_RESOURCES; i++) { 
+printf("Resource %d: %d\n", i + 1, available[i]); 
+} 
+} 
