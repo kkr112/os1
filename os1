@@ -1,178 +1,127 @@
-#include <stdio.h> 
-#define NUM_PROCESSES 5 
-#define NUM_RESOURCES 3  
-int available[NUM_RESOURCES]; 
-int max[NUM_PROCESSES][NUM_RESOURCES]; 
-int allocation[NUM_PROCESSES][NUM_RESOURCES]; 
-int need[NUM_PROCESSES][NUM_RESOURCES]; 
-void acceptAvailable(); 
-void acceptAllocation(); 
-void acceptMax(); 
-void calculateNeed(); 
-void displayAllocation(); 
-void displayMax(); 
-void displayNeed(); 
-void displayAvailable(); 
-int main() { 
-int choice; 
-do { 
-printf("\nBanker's Algorithm Menu:\n"); 
-printf("1. Accept Available Resources\n"); 
-printf("2. Accept Allocation Matrix\n"); 
-printf("3. Accept Max Matrix\n"); 
-printf("4. Display Allocation Matrix\n"); 
-printf("5. Display Max Matrix\n"); 
-printf("6. Display Need Matrix\n"); 
-printf("7. Display Available Resources\n"); 
-printf("8. Exit\n"); 
-printf("Enter your choice: "); 
-scanf("%d", &choice); 
-switch (choice) { 
-case 1: 
-acceptAvailable(); 
-break; 
-case 2: 
-acceptAllocation(); 
-break; 
-case 3: 
-acceptMax();
-break; 
-case 4: 
-displayAllocation(); 
-break; 
-case 5: 
-displayMax(); 
-break; 
-case 6: 
-calculateNeed(); 
-displayNeed(); 
-break; 
-case 7: 
-displayAvailable(); 
-break; 
-case 8: 
-printf("Exiting...\n"); 
-break; 
-default: 
-printf("Invalid choice. Please try again.\n"); } 
-} while (choice != 8); 
-return 0; 
-} 
-void acceptAvailable() { 
-printf("\nEnter available resources:\n"); for (int i = 0; i < NUM_RESOURCES; i++) { printf("Resource %d: ", i + 1); 
-scanf("%d", &available[i]); 
-} 
-} 
-void acceptAllocation() { 
-printf("\nEnter allocation matrix:\n"); for (int i = 0; i < NUM_PROCESSES; i++) { printf("Enter allocation for process P%d: ", i + 1); for (int j = 0; j < NUM_RESOURCES; j++) { scanf("%d", &allocation[i][j]); 
-} 
-} 
-} 
-void acceptMax() { 
-printf("\nEnter max matrix:\n"); 
-for (int i = 0; i < NUM_PROCESSES; i++) { printf("Enter max for process P%d: ", i + 1); for (int j = 0; j < NUM_RESOURCES; j++) { scanf("%d", &max[i][j]); 
+#include <stdio.h>
+#define PROCESS_COUNT 5
+#define RESOURCE_COUNT 3
+int available[RESOURCE_COUNT];
+int allocation[PROCESS_COUNT][RESOURCE_COUNT] = {
+{2, 3, 2},
+{4, 0, 0},
+{5, 0, 4},
+{4, 3, 3},
+{2, 2, 4}
+};
+int max[PROCESS_COUNT][RESOURCE_COUNT] = {
+{9, 7, 5},
+{5, 2, 2},
+{1, 0, 4},
+{4, 4, 4},
+{6, 5, 5}
+};
+int need[PROCESS_COUNT][RESOURCE_COUNT];
+void calculateNeedMatrix() {
+for (int i = 0; i < PROCESS_COUNT; i++) {
+for (int j = 0; j < RESOURCE_COUNT; j++) {
+need[i][j] = max[i][j] - allocation[i][j];
 }
-} 
-} 
-void displayAllocation() { 
-printf("\nAllocation Matrix:\n"); 
-printf(" "); 
-for (int i = 0; i < NUM_RESOURCES; i++) { 
-printf("R%d ", i + 1); 
-} 
-printf("\n"); 
-for (int i = 0; i < NUM_PROCESSES; i++) { 
-printf("P%d ", i + 1); 
-for (int j = 0; j < NUM_RESOURCES; j++) { 
-printf("%d ", allocation[i][j]); 
-} 
-printf("\n"); 
-} 
-} 
-void displayMax() { 
-printf("\nMax Matrix:\n"); 
-printf(" "); 
-for (int i = 0; i < NUM_RESOURCES; i++) { 
-printf("R%d ", i + 1); 
-} 
-printf("\n"); 
-for (int i = 0; i < NUM_PROCESSES; i++) { 
-printf("P%d ", i + 1); 
-for (int j = 0; j < NUM_RESOURCES; j++) { 
-printf("%d ", max[i][j]); 
-} 
-printf("\n"); 
-} 
-} 
-void calculateNeed() { 
-for (int i = 0; i < NUM_PROCESSES; i++) { 
-for (int j = 0; j < NUM_RESOURCES; j++) { 
-need[i][j] = max[i][j] - allocation[i][j]; 
-} 
-} 
-} 
-void displayNeed() { 
-printf("\nNeed Matrix:\n"); 
-printf(" "); 
-for (int i = 0; i < NUM_RESOURCES; i++) { 
-printf("R%d ", i + 1); 
 }
-printf("\n"); 
-for (int i = 0; i < NUM_PROCESSES; i++) { 
-printf("P%d ", i + 1); 
-for (int j = 0; j < NUM_RESOURCES; j++) { 
-printf("%d ", need[i][j]); 
-} 
-printf("\n"); 
-} 
-} 
-void displayAvailable() { 
-printf("\nAvailable Resources:\n"); 
-for (int i = 0; i < NUM_RESOURCES; i++) { 
-printf("Resource %d: %d\n", i + 1, available[i]); 
-} 
-} 
-
+}
+void displayAllocationAndMax() {
+printf("Process\tAllocation\tMax\n");
+printf("\tA B C\t\tA B C\n");
+for (int i = 0; i < PROCESS_COUNT; i++) {
+printf("P%d\t", i);
+for (int j = 0; j < RESOURCE_COUNT; j++) {
+printf("%d ", allocation[i][j]);
+}
+printf("\t\t");
+for (int j = 0; j < RESOURCE_COUNT; j++) {
+printf("%d ", max[i][j]);
+}
+printf("\n");
+}
+}
+void displayNeedMatrix() {
+printf("Process\tNeed\n");
+printf("\tA B C\n");
+for (int i = 0; i < PROCESS_COUNT; i++) {
+printf("P%d\t", i);
+for (int j = 0; j < RESOURCE_COUNT; j++) {
+printf("%d ", need[i][j]);
+}
+printf("\n");
+}
+}
+void displayAvailable() {
+printf("Available Resources: ");
+for (int i = 0; i < RESOURCE_COUNT; i++) {
+printf("%d ", available[i]);
+}
+printf("\n");
+}
+void acceptAvailable() {
+printf("Enter available resources (A B C): ");
+for (int i = 0; i < RESOURCE_COUNT; i++) {
+scanf("%d", &available[i]);
+}
+}
+int main() {
+int choice;
+calculateNeedMatrix();
+while (1) {
+printf("\nMenu:\n");
+printf("1. Accept Available\n");
+printf("2. Display Allocation and Max\n");
+printf("3. Display Need Matrix\n");
+printf("4. Display Available\n");
+printf("5. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &choice);
+switch (choice) {
+case 1:
+acceptAvailable();
+break;
+case 2:
+displayAllocationAndMax();
+break;
+case 3:
+displayNeedMatrix();
+break;
+case 4:
+displayAvailable();
+break;
+case 5:
+return 0;
+default:
+printf("Invalid choice, try again.\n");
+}
+}
+return 0;
+}
 
 2
 
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_REQUESTS 100
-// Function prototypes
-void fcfs(int requests[], int total_requests, int start_head);
+void fcfs(int requests[], int n, int head) {
+int totalMovement = 0;
+printf("Request served in order: ");
+for (int i = 0; i < n; i++) {
+printf("%d ", requests[i]);
+totalMovement += abs(requests[i] - head);
+head = requests[i];
+}
+printf("\nTotal head movements: %d\n", totalMovement);
+}
 int main() {
-int total_blocks, start_head;
-int requests[MAX_REQUESTS];
-int num_requests;
-// Accept input from the user
-printf("Enter the total number of disk blocks: ");
-scanf("%d", &total_blocks);
-printf("Enter the disk request string (up to %d requests, -1 to terminate):\n", MAX_REQUESTS);
-num_requests = 0;
-while (1) {
-int request;
-printf("Request %d: ", num_requests + 1);
-scanf("%d", &request);
-if (request == -1 || num_requests >= MAX_REQUESTS)
-break;
-requests[num_requests++] = request;
+int n, head;
+printf("Enter total number of requests: ");
+scanf("%d", &n);
+int requests[n];
+printf("Enter the disk request string: ");
+for (int i = 0; i < n; i++) {
+scanf("%d", &requests[i]);
 }
-printf("Enter the start head position: ");
-scanf("%d", &start_head);
-// Call the FCFS scheduling algorithm
-fcfs(requests, num_requests, start_head);
+printf("Enter the starting head position: ");
+scanf("%d", &head);
+fcfs(requests, n, head);
 return 0;
-}
-void fcfs(int requests[], int total_requests, int start_head) {
-int current_head = start_head;
-int total_head_movements = 0;
-printf("\nOrder of service:\n");
-printf("Start -> %d", current_head);
-for (int i = 0; i < total_requests; i++) {
-printf(" -> %d", requests[i]);
-total_head_movements += abs(requests[i] - current_head);
-current_head = requests[i];
-}
-printf("\n\nTotal number of head movements: %d\n", total_head_movements);
 }
